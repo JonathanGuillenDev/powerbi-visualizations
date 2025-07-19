@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Power Bi Data Visualizations</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        background: linear-gradient(135deg, #181a1b 0%, #23272a 100%);
+        color: #e0e0e0;
+    }
+    h2 {
+        color: #fafafa;
+        text-align: center;
+        margin-bottom: 40px;
+        padding: 24px 0;
+        background: rgba(35, 39, 42, 0.5);
+        border-radius: 24px;
+        box-shadow: 0 4px 32px 0 rgba(0,0,0,0.25);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border: 1px solid rgba(255,255,255,0.08);
+        width: 60%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    h3 {
+        color: #fafafa;
+        text-align: center;
+    }
+    a {
+        color: #80bfff;
+    }
+    iframe {
+        background: #23272a;
+        width: 100%;
+        height: 500px;
+        border: none;
+    }
+    .pdf-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 30px;
+    }
+    .pdf-viewer {
+        background: linear-gradient(135deg, rgba(60, 62, 65, 0.6) 0%, rgba(40, 42, 45, 0.5) 100%);
+        width: 90%;
+        max-width: 600px;
+        border: 1px solid rgba(255,255,255,0.18);
+        box-shadow: 0 8px 32px 0 rgba(0,0,0,0.37);
+        overflow: hidden;
+        border-radius: 24px;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        padding: 18px 0 12px 0;
+        transition: box-shadow 0.2s;
+    }
+    .pdf-viewer:hover {
+        box-shadow: 0 12px 40px 0 rgba(0,0,0,0.45);
+        border: 1.5px solid #80bfff;
+    }
+    @media (min-width: 768px) {
+        .pdf-container {
+            flex-direction: row;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .pdf-viewer {
+            flex: 1;
+            min-width: 300px;
+            max-width: 32%;
+        }
+        h2 {
+            width: 50%;
+        }
+    }
+</style>
+</head>
+<body>
+
+    <h2>Power BI Data Visualizations</h2>
+
+    <div class="pdf-container">
+        <div class="pdf-viewer">
+            <h3>Netflix Content Data 2015-2021</h3>
+            <iframe src="assets\NetflixDashboard.pdf" title="Netflix Content Data">
+                <p>Your browser does not support iframes. You can <a href="assets\NetflixDashboard.pdf">download here</a>.</p>
+            </iframe>
+        </div>
+
+        <div class="pdf-viewer">
+            <h3>Sample orders</h3>
+            <iframe src="assets/Orders.pdf" title="Sample Orders">
+                <p>Your browser does not support iframes. You can <a href="assets/Orders.pdf">download here</a>.</p>
+            </iframe>
+        </div>
+
+        <div class="pdf-viewer">
+            <h3>DHL Facilities in Cincinnati</h3>
+            <iframe src="assets/DHLFacilitiessampleUS.pdf" title="DHL Facilities in Cincinnati">
+                <p>Your browser does not support iframes. You can <a href="assets/DHLFacilitiessampleUS.pdf">download here</a>.</p>
+            </iframe>
+        </div>
+    </div>
+
+</body>
+</html>
