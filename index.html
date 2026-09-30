@@ -7,9 +7,11 @@
 <style>
     body {
         font-family: Arial, sans-serif;
-        margin: 20px;
+        margin: 0;
+        padding: 20px;
         background: linear-gradient(135deg, #181a1b 0%, #23272a 100%);
         color: #e0e0e0;
+        min-height: 100vh;
     }
     h2 {
         color: #fafafa;
@@ -26,53 +28,141 @@
         margin-left: auto;
         margin-right: auto;
     }
-    h3 {
-        color: #fafafa;
-        text-align: center;
-    }
-    a {
-        color: #80bfff;
-    }
-    iframe {
-        background: #23272a;
-        width: 100%;
-        height: 500px;
-        border: none;
-    }
     .pdf-container {
         display: flex;
         flex-direction: column;
         align-items: center;
         gap: 30px;
+        max-width: 1200px;
+        margin: 0 auto;
     }
-    .pdf-viewer {
-        background: linear-gradient(135deg, rgba(60, 62, 65, 0.6) 0%, rgba(40, 42, 45, 0.5) 100%);
+    .pdf-card {
+        position: relative;
+        background-color: rgba(40, 42, 45, 0.8);
+        background-blend-mode: overlay;
+        background-size: cover;
+        background-position: center;
         width: 90%;
-        max-width: 600px;
+        max-width: 400px;
         border: 1px solid rgba(255,255,255,0.18);
         box-shadow: 0 8px 32px 0 rgba(0,0,0,0.37);
-        overflow: hidden;
         border-radius: 24px;
         backdrop-filter: blur(12px);
         -webkit-backdrop-filter: blur(12px);
-        padding: 18px 0 12px 0;
-        transition: box-shadow 0.2s;
+        padding: 40px 24px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+        overflow: hidden;
     }
-    .pdf-viewer:hover {
+    .pdf-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, rgba(24, 26, 27, 0.4) 0%, rgba(24, 26, 27, 0.9) 100%);
+        z-index: 1;
+        transition: opacity 0.6s ease;
+    }
+    .pdf-card h3, .pdf-card .view-btn {
+        position: relative;
+        z-index: 2;
+    }
+    .pdf-card:hover {
         box-shadow: 0 12px 40px 0 rgba(0,0,0,0.45);
         border: 1.5px solid #80bfff;
+        transform: translateY(-10px) scale(1.02);
+        background-position: center 20%;
+    }
+    .pdf-card:hover::before {
+        opacity: 0.9;
+    }
+    .pdf-card h3 {
+        color: #fafafa;
+        margin: 0;
+        font-size: 1.2rem;
+    }
+    .view-btn {
+        background: #80bfff;
+        color: #181a1b;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 12px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+    .view-btn:hover {
+        background: #a0dfff;
+    }
+    /* Modal Styles */
+    .modal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 1000;
+        background: rgba(0, 0, 0, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        animation: fadeIn 0.3s ease;
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    .modal-content {
+        width: 100%;
+        height: 100%;
+        max-width: 1200px;
+        max-height: 90vh;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: #fafafa;
+        width: 100%;
+    }
+    .close-modal {
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        font-size: 24px;
+        cursor: pointer;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s;
+    }
+    .close-modal:hover {
+        background: rgba(255, 255, 255, 0.2);
+    }
+    .modal-iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+        border-radius: 12px;
+        background: white;
     }
     @media (min-width: 768px) {
         .pdf-container {
             flex-direction: row;
-            justify-content: space-around;
+            justify-content: center;
             flex-wrap: wrap;
             gap: 20px;
-        }
-        .pdf-viewer {
-            flex: 1;
-            min-width: 300px;
-            max-width: 32%;
         }
         h2 {
             width: 50%;
@@ -80,32 +170,67 @@
     }
 </style>
 </head>
-<body>
+<body onload="init()">
 
     <h2>Power BI Data Visualizations</h2>
 
     <div class="pdf-container">
-        <div class="pdf-viewer">
+        <div class="pdf-card" style="background-image: url('assets/netflix.png')" onclick="openModal('assets/NetflixDashboard.pdf', 'Netflix Content Data 2015-2021')">
             <h3>Netflix Content Data 2015-2021</h3>
-            <iframe src="assets\NetflixDashboard.pdf" title="Netflix Content Data">
-                <p>Your browser does not support iframes. You can <a href="assets\NetflixDashboard.pdf">download here</a>.</p>
-            </iframe>
+            <button class="view-btn">View Fullscreen</button>
         </div>
 
-        <div class="pdf-viewer">
-            <h3>Sample orders</h3>
-            <iframe src="assets/Orders.pdf" title="Sample Orders">
-                <p>Your browser does not support iframes. You can <a href="assets/Orders.pdf">download here</a>.</p>
-            </iframe>
+        <div class="pdf-card" style="background-image: url('assets/orders.png')" onclick="openModal('assets/Orders.pdf', 'Sample Orders')">
+            <h3>Sample Orders</h3>
+            <button class="view-btn">View Fullscreen</button>
         </div>
 
-        <div class="pdf-viewer">
+        <div class="pdf-card" style="background-image: url('assets/dhl.png')" onclick="openModal('assets/DHLFacilitiessampleUS.pdf', 'DHL Facilities in Cincinnati')">
             <h3>DHL Facilities in Cincinnati</h3>
-            <iframe src="assets/DHLFacilitiessampleUS.pdf" title="DHL Facilities in Cincinnati">
-                <p>Your browser does not support iframes. You can <a href="assets/DHLFacilitiessampleUS.pdf">download here</a>.</p>
-            </iframe>
+            <button class="view-btn">View Fullscreen</button>
         </div>
     </div>
 
+    <div id="pdfModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">PDF Viewer</h3>
+                <button class="close-modal" onclick="closeModal()">&times;</button>
+            </div>
+            <iframe id="modalIframe" class="modal-iframe" src=""></iframe>
+        </div>
+    </div>
+
+    <script>
+        function openModal(pdfPath, title) {
+            const modal = document.getElementById('pdfModal');
+            const iframe = document.getElementById('modalIframe');
+            const titleElem = document.getElementById('modalTitle');
+
+            titleElem.innerText = title;
+            iframe.src = pdfPath;
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('pdfModal');
+            const iframe = document.getElementById('modalIframe');
+            
+            modal.style.display = 'none';
+            iframe.src = '';
+            document.body.style.overflow = 'auto';
+        }
+
+        function init() {
+            // Add click to close modal when clicking backdrop
+            window.onclick = function(event) {
+                const modal = document.getElementById('pdfModal');
+                if (event.target == modal) {
+                    closeModal();
+                }
+            }
+        }
+    </script>
 </body>
 </html>
